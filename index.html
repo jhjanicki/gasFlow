@@ -3,105 +3,30 @@
    <head>
       <meta charset = "utf-8">
       <meta name='viewport' content='width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no'>
-      <title>Visualizing Shark Numbers</title>
-      <meta name="description" content="Sharks">
+      <title>European Gas Flow</title>
+      <meta name="description" content="EU Natural Gas">
       <meta name="author" content="Julia Janicki">
       <meta name="description" content="">
       <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
       <link href="https://fonts.googleapis.com/css?family=Frank+Ruhl+Libre:300,400,700&display=swap" rel="stylesheet">
       <link href="./css/main.css" rel="stylesheet">
       <style>
-      .container {
-        width: 500px;
-        margin: 50px auto 0;
-        text-align: center
-      }
-
-      /*Styling Selectbox*/
-      .dropdown {
-        width: 300px;
-        display: inline-block;
-        background-color: #fff;
-        border-radius: 5px;
-        box-shadow: 0 0 2px rgb(204, 204, 204);
-        transition: all .5s ease;
-        position: relative;
-        font-size: 14px;
-        color: #474747;
-        height: 100%;
-        text-align: left
-      }
-      .dropdown .select {
-          cursor: pointer;
-          display: block;
-          padding: 10px
-      }
-      .dropdown .select > i {
-          font-size: 13px;
-          color: #888;
-          cursor: pointer;
-          transition: all .3s ease-in-out;
-          float: right;
-          line-height: 20px
-      }
-      .dropdown:hover {
-          box-shadow: 0 0 4px rgb(204, 204, 204)
-      }
-      .dropdown:active {
-          background-color: #f8f8f8
-      }
-      .dropdown.active:hover,
-      .dropdown.active {
-          box-shadow: 0 0 4px rgb(204, 204, 204);
-          border-radius: 5px 5px 0 0;
-          background-color: #f8f8f8
-      }
-      .dropdown.active .select > i {
-          transform: rotate(-90deg)
-      }
-      .dropdown .dropdown-menu {
-          position: absolute;
-          background-color: #fff;
-          width: 100%;
-          left: 0;
-          margin-top: 1px;
-          box-shadow: 0 1px 2px rgb(204, 204, 204);
-          border-radius: 0 1px 5px 5px;
-          overflow: hidden;
-          display: none;
-          max-height: 144px;
-          overflow-y: auto;
-          z-index: 9
-      }
-      .dropdown .dropdown-menu li {
-          padding: 10px;
-          transition: all .2s ease-in-out;
-          cursor: pointer
-      }
-      .dropdown .dropdown-menu {
-          padding: 0;
-          list-style: none
-      }
-      .dropdown .dropdown-menu li:hover {
-          background-color: #f2f2f2
-      }
-      .dropdown .dropdown-menu li:active {
-          background-color: #e2e2e2
-      }
       </style>
    </head>
    <body>
       <div class="intro-section">
          <div class="headline-section">
-            <p class="headline-big" id="title">European Gas Flow</p>
+            <p class="headline-big" id="title">The Trade of Natural Gas in Europe</p>
+            <p class="text-center">By Julia Janicki </p>
 
-            <div id="introdummy">
-
+            <div id="introdummy" class="text-center">
+              In Europe, which countries are the major importers of natural gas? Where do they get it from?
+              Did the major importers and exporters change over the past decade?
             </div>
          </div>
          <div class="byline-section">
-           <p class="text-center">Current year: <span id="currentYear">2018</span></p>
-           <div class="container">
+           <p class="text-center">Current year selected: <span id="currentYear">2018</span></p>
+           <div class="container1">
                 <div class="dropdown">
                   <div class="select">
                     <span>Select year</span>
@@ -134,33 +59,65 @@
 
          <div id="right-column">
 
-            <p class="section-title" id="Numbers">Exit / Enter Countries</p>
+            <p class="section-title">All Countries</p>
 
-            <p class="right-column-prose" id="allsharks">Here are all the European countries that import and export natural gas. The size of each circle is proportional to the amount of natural gas traded. We can see right away the major importers (Germany) and exporters (Norway) of natural gas.
-
-
-            <p class="right-column-prose" id="sharkfamilies">To see the importers and exporters more clearly, the circles are grouped based on import / export.
+            <p class="right-column-prose" id="allcountries">Here you can see all the European countries that <span class="colorEnter">import</span> and <span class="colorExit">export</span> natural gas. The size of each circle is proportional to the amount of natural gas traded.
 
 
-            <p class="right-column-prose" id="depth"> Here we overlay natural gas import / export on top of GDP, and we can see that there isn't a very distinct relationship. For example, wealthy countries don't necessarily import more natural gas.</p>
+            <p class="section-title">Import & Export</p>
+            <p class="right-column-prose" id="divided">After grouping based on trade flow direction, right away it is apparent who some of the major <span class="colorEnter">importers</span> and <span class="colorExit">exporters</span> are. For example, <b>Germany</b> and <b>Italy</b> are among the top importers of natural gas while <b>Norway</b> and <b>Russia</b> are among the top exporters.
 
-            <p class="right-column-prose" id="radial"> This networks shows which countries have trading relationships for natural gas, some varying by year. For example, Norway, Germany and Russia exports to multiple countries while Iran only exports to Turkey.</p>
+            <p class="section-title">GDP (per capita)</p>
+            <p class="right-column-prose" id="gdp"> Here the <span class="colorEnter">import</span> of <span class="colorExit">export</span> of natural gas is overlaid on top of GDP per capita, showing that there isn't a very distinct relationship. For example, wealthy countries such as <b>Luxembourg</b> don't necessarily import more natural gas.</p>
 
-            <p class="right-column-prose" id="sort"> The import / export countries are sorted by the gas traded that particular year.</p>
+            <p class="section-title">Trade Network</p>
+            <p class="right-column-prose" id="radial"> This networks shows the natural gas trading relationships among different countries, some countries have a single trade relationship while others have multiple. For example, <b>Norway</b>, <b>Germany</b> and <b>Russia</b> exports to multiple countries while <b>Iran</b> only exports to <b>Turkey</b>.</p>
 
-          <br><br><br>
+            <p class="section-title">Major Players Sorted</p>
+            <p class="right-column-prose" id="sort"> Here the <span class="colorEnter">import</span> / <span class="colorExit">export</span> countries are sorted by the amount of natural gas traded that particular year. Some countries are both major importers and exporters, such as <b>Germany</b>, while others are either major exporters or importers but not both, such as <b>Norway</b>.</p>
+
+          <br>
          </div>
       </div>
 
-      <div id="conclusion">
+      <div class="container">
+        <h3 class="conclusion"><strong> Major Players Over Time </strong></h3>
+        <p style='margin-bottom: 50px;'> </p>
+        <div class="row">
+          <div class="col-sm-5">
+            <div id="chart2"></div>
+          </div>
+          <div class="col-sm-1">
+          </div>
+          <div class="col-sm-5">
+            <div id="chart3"></div>
+          </div>
+          <div class="col-sm-1">
+          </div>
+        </div>
 
       </div>
-      <div id="thankyou">
-        <p> Thank you for reading! </p>
-        <div id="button_wrapper2">
-          <button class="btn"><a href="#Modal" data-toggle="modal"> Further Reading </a> </button>
+
+      <hr>
+
+      <!-- Data souces and methods -->
+      <div class="row" style="padding-top: 0px;">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-5 wrap">
+          <h3><b>Methods</b></h3>
+          <p>First, instead of visualizing data by month I want to visualize it by year, so I summed up the monthly data by year for each trade flow.
+             Then since I didn't need the border point information I grouped the data by unique combinations of exit-enter pairs and summed them.
+             I compiled a list of all importers and all exporters, I then converted this data into "nodes" and their relationship into "links" in json format to create the bubble charts and network visualizations.
+          </p>
+
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-5 wrap">
+          <h3><b>Data Source</b></h3>
+          <p>Countries' administrations, Gas Transport Service website, Opal Nel's website</p>
         </div>
       </div>
+
 
 
       </div>
@@ -172,8 +129,6 @@
       <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js'></script>
       <script src='./js/textures.min.js'></script>
       <script src='./js/tooltip.js'></script>
-      <script src='./data/countries.js'></script>
-      <script src='./data/decline.js'></script>
       <script src='./data/data.js'></script>
       <script src='./js/main.js'></script>
       <script>

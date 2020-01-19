@@ -14,28 +14,28 @@ $(window).resize(function() {
 var selectedData = "data2018";
 
 /*Dropdown Menu*/
-$('.dropdown').click(function () {
-        $(this).attr('tabindex', 1).focus();
-        $(this).toggleClass('active');
-        $(this).find('.dropdown-menu').slideToggle(300);
-    });
-    $('.dropdown').focusout(function () {
-        $(this).removeClass('active');
-        $(this).find('.dropdown-menu').slideUp(300);
-    });
-    $('.dropdown .dropdown-menu li').click(function () {
-        $(this).parents('.dropdown').find('span').text($(this).text());
-        $(this).parents('.dropdown').find('input').attr('value', $(this).attr('id'));
-    });
+$('.dropdown').click(function() {
+    $(this).attr('tabindex', 1).focus();
+    $(this).toggleClass('active');
+    $(this).find('.dropdown-menu').slideToggle(300);
+});
+$('.dropdown').focusout(function() {
+    $(this).removeClass('active');
+    $(this).find('.dropdown-menu').slideUp(300);
+});
+$('.dropdown .dropdown-menu li').click(function() {
+    $(this).parents('.dropdown').find('span').text($(this).text());
+    $(this).parents('.dropdown').find('input').attr('value', $(this).attr('id'));
+});
 /*End Dropdown Menu*/
 
 
-$('.dropdown-menu li').click(function (e) {
-  var input =  $(e.target).text();
-  //console.log(input);
-  selectedData = "data"+input;
-  $("#currentYear").html(input);
-  console.log(selectedData);
+$('.dropdown-menu li').click(function(e) {
+    var input = $(e.target).text();
+    //console.log(input);
+    selectedData = "data" + input;
+    $("#currentYear").html(input);
+    //console.log(selectedData);
 });
 
 //////////////////////////////////////////////////////////////////////////
@@ -96,6 +96,11 @@ if (viewportWidth > 1200) {
     width = 1200 - 300 - margin.left - margin.right
 }
 
+// chart 2
+
+var width2 = $('#chart2').parent().width();
+var height2 = width2 * 2 / 3;
+
 ////////////////////////////
 //// GLOBAL VARIANLES  ////
 ///////////////////////////
@@ -126,8 +131,17 @@ var xAxis = d3.axisBottom(xScale)
     .ticks(10, ".0s")
     .tickSizeOuter(0);
 
-var xScale1 = d3.scaleLinear().range([margin.left, width-margin.right]);
-var xScale2 = d3.scaleLinear().range([margin.left, width-margin.right]);
+var xScale1 = d3.scaleLinear().range([margin.left, width - margin.right]);
+var xScale2 = d3.scaleLinear().range([margin.left, width - margin.right]);
+
+
+//Scales chart 2
+var x2 = d3.scaleLinear().domain([2009, 2018]).range([0, width2]),
+    y2 = d3.scaleLinear().domain([1, 200000]).range([height2, 0]),
+    xAxis2 = d3.axisBottom(x2).ticks(10).tickFormat(d3.format("d")).tickSize(0),
+    yAxis2 = d3.axisLeft(y2).ticks(10).tickSize(0);
+
+
 
 ////////////////////////////////
 //// initialize SVG and g  /////
@@ -159,12 +173,28 @@ var g = svg.append("g").attr("class", "frame")
         }
     });
 
+var svg2 = d3.select("#chart2").append("svg")
+    .attr("width", width2 + margin.left + margin.right)
+    .attr("height", height2 + margin.top + margin.bottom);
+var g2 = svg2.append("g").attr("class", "wrapper").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var svg3 = d3.select("#chart3").append("svg")
+    .attr("width", width2 + margin.left + margin.right)
+    .attr("height", height2 + margin.top + margin.bottom);
+var g3 = svg3.append("g").attr("class", "wrapper2").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var legend = svg2.append("g")
+    .attr("class", "legend")
+    .attr("transform", "translate(110,0)");
+
+var legend2 = svg3.append("g")
+    .attr("class", "legend2")
+    .attr("transform", "translate(110,0)");
+
 var xAxisG = g.append("g")
     .attr("class", "axis axis--x")
     .attr("transform", "translate(0," + (height - 200) + ")")
 
-var bubblesGroup = svg.append('g').attr("class", "bubbleG")
-legendGroup = svg.append('g').attr("class", "legendG");
 
 data.nodes.forEach(function(d) {
     d.data2009 = +d.data2009;
@@ -213,14 +243,7 @@ var circles = g.selectAll(".bubble")
     .on('mouseover', showDetail)
     .on('mouseout', hideDetail);
 
-  var links = g.selectAll(".link")
-
-
-// var links = g.selectAll(".link")
-//     .data(data.links)
-//     .enter().append("line")
-//     .attr("class","link");
-
+var links = g.selectAll(".link")
 
 
 
@@ -233,6 +256,9 @@ function changeNetwork() {
         .attr('cy', d => d.y)
 
 }
+
+var dataExitSorted;
+var dataEnterSorted;
 
 var exitPositions = [];
 var enterPositions = [];
@@ -268,7 +294,7 @@ var pinBubbleChart = new ScrollMagic.Scene({
 
         // circles appear
         circles.transition()
-            .duration(1000)
+            .duration(250)
             .attr('r', function(d) {
                 return radiusScale(+d[selectedData])
             });
@@ -277,13 +303,15 @@ var pinBubbleChart = new ScrollMagic.Scene({
 
 
 var firstTrigger = new ScrollMagic.Scene({
-        triggerElement: "#allsharks",
+        triggerElement: "#allcountries",
         triggerHook: triggerAmount,
         offset: 100,
         duration: 300
     })
     .addTo(controller)
     .on("enter", function(e) {
+
+        d3.selectAll(".link").attr("opacity", 0);
 
         simulation.force('x', d3.forceX().strength(0.06).x(center.x))
             .force('y', d3.forceY(function(d) {
@@ -293,7 +321,7 @@ var firstTrigger = new ScrollMagic.Scene({
         simulation.alpha(0.3).restart();
         circlesTransition();
 
-        d3.selectAll("#allsharks").classed("highlighted", true)
+        d3.selectAll("#allcountries").classed("highlighted", true)
 
     })
     .on("leave", function(e) {
@@ -302,19 +330,20 @@ var firstTrigger = new ScrollMagic.Scene({
     });
 
 var secondTrigger = new ScrollMagic.Scene({
-        triggerElement: "#sharkfamilies",
+        triggerElement: "#divided",
         triggerHook: triggerAmount,
         offset: 100,
         duration: 300
     })
     .addTo(controller)
     .on("enter", function(e) {
-      if (e.target.controller().info("scrollDirection") == "REVERSE") {
-        drawCircles(data.nodes);
-        simulation.nodes(data.nodes)
-            .on('tick', changeNetwork);
+        if (e.target.controller().info("scrollDirection") == "REVERSE") {
+            drawCircles(data.nodes);
+            simulation.nodes(data.nodes)
+                .on('tick', changeNetwork);
         }
 
+        d3.selectAll(".link").attr("opacity", 0);
 
         d3.select(".axis").attr("opacity", 0);
 
@@ -336,8 +365,7 @@ var secondTrigger = new ScrollMagic.Scene({
         simulation.alpha(0.7).restart();
         circlesTransition();
 
-
-        d3.selectAll("#sharkfamilies").classed("highlighted", true)
+        d3.selectAll("#divided").classed("highlighted", true)
     })
     .on("leave", function(e) {
         d3.selectAll(".highlighted").classed("highlighted", false);
@@ -345,7 +373,7 @@ var secondTrigger = new ScrollMagic.Scene({
 
 
 var thirdTrigger = new ScrollMagic.Scene({
-        triggerElement: "#depth",
+        triggerElement: "#gdp",
         triggerHook: triggerAmount,
         offset: 100,
         duration: 400
@@ -354,7 +382,7 @@ var thirdTrigger = new ScrollMagic.Scene({
     .on("enter", function(e) {
 
         d3.select(".axis").attr("opacity", 1);
-        d3.selectAll(".link").attr("opacity",0);
+        d3.selectAll(".link").attr("opacity", 0);
 
         xScale.domain(GDPextent);
         xAxis.ticks(10, ".0s")
@@ -364,12 +392,12 @@ var thirdTrigger = new ScrollMagic.Scene({
             });
         xAxisG.call(xAxis);
 
-        var newData = data.nodes.filter(function(d){
-          return d.country != "Liquefied Natural Gas" && d.country != 'Isle of Man'
+        var newData = data.nodes.filter(function(d) {
+            return d.country != "Liquefied Natural Gas" && d.country != 'Isle of Man'
         })
 
         drawCircles(newData);
-        console.log(newData)
+        //console.log(newData)
         simulation.nodes(newData)
             .on('tick', changeNetwork);
 
@@ -384,8 +412,8 @@ var thirdTrigger = new ScrollMagic.Scene({
                 }).strength(0.9))
                 .force("y", d3.forceY(height / 2).strength(0.09))
                 .force('collide', d3.forceCollide(function(d) {
-                        return radiusScale(+d[selectedData])
-                    }))
+                    return radiusScale(+d[selectedData])
+                }))
                 .alphaDecay(0.07) // change this to change how clumped the circles are
                 .on('tick', changeNetwork);
 
@@ -393,14 +421,16 @@ var thirdTrigger = new ScrollMagic.Scene({
 
             simulation.force("x", d3.forceX(function(d) {
                     return xScale(d.GDP);
-                }).strength(0.9))
+                }).strength(1))
                 .force("y", d3.forceY(height / 2).strength(0.5))
-                .alphaDecay(0.06)
+                .alphaDecay(0.05)
                 .on('tick', changeNetwork);
+
+            simulation.alpha(0.4).restart();
         }
 
 
-
+        d3.selectAll("#gdp").classed("highlighted", true)
 
     })
     .on("leave", function(e) {
@@ -442,43 +472,51 @@ var fourth = new ScrollMagic.Scene({
 
         var allLinkPos = enterPositions.concat(exitPositions);
 
-        console.log(allLinkPos)
+        //console.log(allLinkPos)
 
         var linksData = data.links;
 
-        for(var i=0;i<linksData.length;i++){
-           for(var j = 0;j<allLinkPos.length;j++){
-             if (linksData[i].source ==allLinkPos[j].id){
-               linksData[i].sourcex = allLinkPos[j].x1;
-               linksData[i].sourcey = allLinkPos[j].y1;
-             }
-             if (linksData[i].target == allLinkPos[j].id){
-               linksData[i].targetx = allLinkPos[j].x1;
-               linksData[i].targety = allLinkPos[j].y1;
-             }
-           }
+        for (var i = 0; i < linksData.length; i++) {
+            for (var j = 0; j < allLinkPos.length; j++) {
+                if (linksData[i].source == allLinkPos[j].id) {
+                    linksData[i].sourcex = allLinkPos[j].x1;
+                    linksData[i].sourcey = allLinkPos[j].y1;
+                }
+                if (linksData[i].target == allLinkPos[j].id) {
+                    linksData[i].targetx = allLinkPos[j].x1;
+                    linksData[i].targety = allLinkPos[j].y1;
+                }
+            }
         }
 
-        console.log(linksData)
+        //console.log(linksData)
 
-        linksData.forEach(function(d){
-          d.id = d.source+"_"+d.target;
+        linksData.forEach(function(d) {
+            d.id = d.source + "_" + d.target;
         })
 
 
-      links
-        .data(linksData)
-        .enter().append("line")
-          .attr("class", "link")
-          .attr("stroke", "#ddd")
-          .transition().duration(1000)
-          .attr("opacity", 0.8)
-          .attr("stroke-opacity", 0.8)
-          // .attr("id")
-          .attr("x1", function(d){ return d.sourcex})
-          .attr("y1", function(d){ return d.sourcey})
-          .attr("x2", function(d){ return d.targetx})
-          .attr("y2", function(d){ return d.targety})
+        links
+            .data(linksData)
+            .enter().append("line")
+            .attr("class", "link")
+            .attr("stroke", "#ddd")
+            .transition().duration(250)
+            .attr("opacity", 0.8)
+            .attr("stroke-opacity", 0.8)
+            // .attr("id")
+            .attr("x1", function(d) {
+                return d.sourcex
+            })
+            .attr("y1", function(d) {
+                return d.sourcey
+            })
+            .attr("x2", function(d) {
+                return d.targetx
+            })
+            .attr("y2", function(d) {
+                return d.targety
+            })
 
 
 
@@ -499,51 +537,53 @@ var fourth = new ScrollMagic.Scene({
         d3.selectAll(".bubble").raise();
 
         d3.selectAll(".bubble")
-          .on('mouseover',function(d){
+            .on('mouseover', function(d) {
 
-          d3.selectAll(".link").attr("stroke","#ddd");
+                d3.selectAll(".link").attr("stroke", "#ddd");
 
-            d3.selectAll(".link")
-            .filter(function(k) {
-              return k.source === d.id;
-            }).attr("stroke","black");
+                d3.selectAll(".link")
+                    .filter(function(k) {
+                        return k.source === d.id;
+                    }).attr("stroke", "black");
 
-            d3.selectAll(".link")
-            .filter(function(k) {
-              return k.target === d.id;
-            }).attr("stroke","black");
+                d3.selectAll(".link")
+                    .filter(function(k) {
+                        return k.target === d.id;
+                    }).attr("stroke", "black");
 
-            var texture = textures
-                .lines()
-                .size(4)
-                .strokeWidth(1)
-                .stroke(function() {
-                    return d.status == 'Enter' ? '#00B78C' : '#EC7E6B';
-                });
+                var texture = textures
+                    .lines()
+                    .size(4)
+                    .strokeWidth(1)
+                    .stroke(function() {
+                        return d.status == 'Enter' ? '#00B78C' : '#EC7E6B';
+                    });
 
-            svg.call(texture);
-            d3.select(this).attr('fill', texture.url());
+                svg.call(texture);
+                d3.select(this).attr('fill', texture.url());
 
 
-            var content = '<span><b>' + d.country + '</b></span><br/>' +
-                '<span><b>Exit / Enter: </b>' + d.status + '</span><br/>' +
-                '<span><b>Gas: </b>' + d[selectedData];
+                var content = '<span class="title"><b>' + d.country + '</b></span><br/>' +
+                    '<span><b>Flow Direction: </b>' + d.status + '</span><br/>' +
+                    '<span><b>Amount: </b>' + d[selectedData] + ' (million cubic meters)';
 
-            d3.selectAll('.tooltip').style('background-image', '-webkit-linear-gradient(top,' + (d.status == 'Enter' ? '#00B78C' : '#EC7E6B') + ', ' + (d.status == 'Enter' ? '#00B78C' : '#EC7E6B') + ' 40%, transparent 40%, transparent 100%)');
-            d3.selectAll('.tooltip').style('background-image', 'linear-gradient(top,' + (d.status == 'Enter' ? '#00B78C' : '#EC7E6B') + ', ' + (d.status == 'Enter' ? '#00B78C' : '#EC7E6B') + ' 40%, transparent 40%, transparent 100%)');
-            tooltip.showTooltip(content, d3.event);
+                d3.selectAll('.tooltip').style('background-image', '-webkit-linear-gradient(top,' + (d.status == 'Enter' ? '#00B78C' : '#EC7E6B') + ', ' + (d.status == 'Enter' ? '#00B78C' : '#EC7E6B') + ' 40%, transparent 40%, transparent 100%)');
+                d3.selectAll('.tooltip').style('background-image', 'linear-gradient(top,' + (d.status == 'Enter' ? '#00B78C' : '#EC7E6B') + ', ' + (d.status == 'Enter' ? '#00B78C' : '#EC7E6B') + ' 40%, transparent 40%, transparent 100%)');
+                tooltip.showTooltip(content, d3.event);
 
-          })
-          .on('mouseout',function(d){
-            d3.selectAll(".link").attr("stroke","#ddd");
+            })
+            .on('mouseout', function(d) {
+                d3.selectAll(".link").attr("stroke", "#ddd");
 
-            d3.select(this)
-                .attr('fill', function(d) {
-                    return d.status == 'Enter' ? '#00B78C' : '#EC7E6B';
-                });
+                d3.select(this)
+                    .attr('fill', function(d) {
+                        return d.status == 'Enter' ? '#00B78C' : '#EC7E6B';
+                    });
 
-            tooltip.hideTooltip();
-          });
+                tooltip.hideTooltip();
+            });
+
+        d3.selectAll("#radial").classed("highlighted", true)
 
 
     })
@@ -551,103 +591,107 @@ var fourth = new ScrollMagic.Scene({
         d3.selectAll(".highlighted").classed("highlighted", false)
     });
 
-  var firth = new ScrollMagic.Scene({
-          triggerElement: "#sort",
-          triggerHook: triggerAmount,
-          offset: 100,
-          duration: 400
-      })
-      .addTo(controller)
-      .on("enter", function(e) {
+var fifth = new ScrollMagic.Scene({
+        triggerElement: "#sort",
+        triggerHook: triggerAmount,
+        offset: 100,
+        duration: 400
+    })
+    .addTo(controller)
+    .on("enter", function(e) {
 
 
-          d3.selectAll(".link").attr("opacity",0);
+        d3.selectAll(".link").attr("opacity", 0);
 
-          if (e.target.controller().info("scrollDirection") == "REVERSE") {
-
-
-          } else {
+        if (e.target.controller().info("scrollDirection") == "REVERSE") {
 
 
-          var dataExit = data.nodes.filter(function(d) {
-              return d.status == 'Exit'
-          });
-
-          var dataEnter = data.nodes.filter(function(d) {
-              return d.status == 'Enter'
-          });
-
-          var dataExitSorted = dataExit.slice().sort((a, b) => d3.ascending(a[selectedData], b[selectedData]))
-          var dataEnterSorted = dataEnter.slice().sort((a, b) => d3.ascending(a[selectedData], b[selectedData]))
-
-          dataExitSorted.forEach(function(d,i){
-            d.exit = i;
-          })
-
-          dataEnterSorted.forEach(function(d,i){
-            d.enter = i;
-          })
-          console.log(dataExitSorted);
-          console.log(dataEnterSorted);
-
-          var sortedAll = dataExitSorted.concat(dataEnterSorted);
-
-          var indexExit = [...Array(dataExitSorted.length).keys()]; //[0,1,2...34]
-          var indexEnter = [...Array(dataEnterSorted.length).keys()]; //[0,1,2...34]
-
-           xScale1.domain([0,33]);
-           xScale2.domain([0,37]);
+        } else {
 
 
-           sortedAll.forEach(function(d) {
-             if(d.status=='Exit'){
-               d.x= xScale1(d.exit);
-               d.y=height/3;
-             }else{
-               d.x= xScale2(d.enter);
-               d.y=2*height/3;
-             }
-           })
+            var dataExit = data.nodes.filter(function(d) {
+                return d.status == 'Exit'
+            });
 
-           drawCircles(sortedAll);
+            var dataEnter = data.nodes.filter(function(d) {
+                return d.status == 'Enter'
+            });
 
-           simulation = d3.forceSimulation(sortedAll);
-           simulation.force('x', d3.forceX(function(d) {
-             if(d.status=='Exit'){
-               return xScale1(d.exit)
-             }else{
-               return xScale2(d.enter)
-             }
-           }).strength(1.5))
-           .force('y', d3.forceY(function(d) {
-             if(d.status=='Exit'){
-               return height/3
-             }else{
-               return height*2/3
-             }
-           }).strength(2))
-           .force("collide", d3.forceCollide(function(d) {
-               return radiusScale(+d[selectedData])
-           }))
-           .alphaDecay(0.03)
-           .on('tick', changeNetwork);
+            dataExitSorted = dataExit.slice().sort((a, b) => d3.ascending(a[selectedData], b[selectedData]))
+            dataEnterSorted = dataEnter.slice().sort((a, b) => d3.ascending(a[selectedData], b[selectedData]))
 
-           simulation.alpha().restart();
-           simualtion.stop()
+            dataExitSorted.forEach(function(d, i) {
+                d.exit = i;
+            })
 
-         }
+            dataEnterSorted.forEach(function(d, i) {
+                d.enter = i;
+            })
+            console.log(dataExitSorted);
+            console.log(dataEnterSorted);
+
+            chart2(); // call here since it needs the above arrays to be populated
+            chart3();
+            var sortedAll = dataExitSorted.concat(dataEnterSorted);
+
+            var indexExit = [...Array(dataExitSorted.length).keys()]; //[0,1,2...34]
+            var indexEnter = [...Array(dataEnterSorted.length).keys()]; //[0,1,2...34]
+
+            xScale1.domain([0, 33]);
+            xScale2.domain([0, 37]);
 
 
-      })
-      .on("leave", function(e) {
-          d3.selectAll(".highlighted").classed("highlighted", false)
-      });
+            sortedAll.forEach(function(d) {
+                if (d.status == 'Exit') {
+                    d.x = xScale1(d.exit);
+                    d.y = height / 3;
+                } else {
+                    d.x = xScale2(d.enter);
+                    d.y = 2 * height / 3;
+                }
+            })
+
+            drawCircles(sortedAll);
+
+            simulation = d3.forceSimulation(sortedAll);
+            simulation.force('x', d3.forceX(function(d) {
+                    if (d.status == 'Exit') {
+                        return xScale1(d.exit)
+                    } else {
+                        return xScale2(d.enter)
+                    }
+                }).strength(1.5))
+                .force('y', d3.forceY(function(d) {
+                    if (d.status == 'Exit') {
+                        return height / 3
+                    } else {
+                        return height * 2 / 3
+                    }
+                }).strength(3))
+                .force("collide", d3.forceCollide(function(d) {
+                    return radiusScale(+d[selectedData])
+                }))
+                .alphaDecay(0.027)
+                .on('tick', changeNetwork);
+
+            simulation.alpha(0.8).restart();
+            //simulation.stop()
+
+        }
+
+        d3.selectAll("#sort").classed("highlighted", true)
+
+
+    })
+    .on("leave", function(e) {
+        d3.selectAll(".highlighted").classed("highlighted", false)
+    });
 
 
 
 function drawRadius(numNodes, radius, dataN) {
     for (var i = 0; i < dataN.length; i++) {
-      console.log(dataN[i].id);
+        //console.log(dataN[i].id);
 
         var angle = (i / (numNodes / 2)) * Math.PI; // Calculate the angle at which the element will be placed.
         // For a semicircle, we would use (i / numNodes) * Math.PI.
@@ -663,10 +707,10 @@ function drawRadius(numNodes, radius, dataN) {
         obj['x1'] = x;
         obj['y1'] = y;
 
-        if(dataN[i].status=='Exit'){
-          exitPositions.push(obj);
-        }else{
-          enterPositions.push(obj);
+        if (dataN[i].status == 'Exit') {
+            exitPositions.push(obj);
+        } else {
+            enterPositions.push(obj);
         }
     }
 
@@ -717,6 +761,261 @@ function drawCircles(data) {
     circlesEnter();
 }
 
+// multiline chart for top 5 importers
+
+function chart2() {
+    var topImporters = dataEnterSorted.slice(-5);
+    //console.log("chart2");
+    //console.log(topImporters);
+
+    var topImporters2 = [];
+
+    for (var i = 0; i < topImporters.length; i++) {
+        for (var j = 0; j < 10; j++) {
+            var obj1 = {};
+            var field = 'data' + (2009 + j);
+            obj1.year = +(2009 + j);
+            obj1.import = topImporters[i][field];
+            obj1.country = topImporters[i].country;
+            topImporters2.push(obj1);
+        }
+    }
+
+    var dataByImportCountry = d3.nest()
+        .key(function(d) {
+            return d.country;
+        })
+        .entries(topImporters2);
+
+    var dataByYear = d3.nest()
+        .key(function(d) {
+            return d.year;
+        })
+        .entries(topImporters2);
+
+    var line = d3.line()
+        .x(function(d) {
+            return x2(d.year);
+        })
+        .y(function(d) {
+            return y2(d.import);
+        })
+        .curve(d3.curveBasis);
+
+    g2.append("g")
+        .attr("class", "axis axis--x")
+        .style("font-size", 13)
+        .attr("transform", "translate(0," + (height2) + ")")
+        .call(xAxis2);
+
+    g2.append("g")
+        .attr("class", "axis axis--y")
+        .attr("transform", "translate(0,0)")
+        .call(yAxis2)
+        .append("text")
+        .attr("class", "titles")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -50)
+        .attr("y", -60)
+        .attr("dy", ".71em")
+        .attr("fill", "black")
+        .style("font-family", "PT Sans Narrow")
+        .style("font-size", 16)
+        .style("text-anchor", "middle")
+        .text("Natural Gas Imports");
+
+    var colorScale = d3.scaleOrdinal()
+        .domain([0, 1, 2, 3, 4])
+        .range(["#96D9C6", "#24A6A6", "#248EA6", "#1A5A73", "#253B59"]);
+
+    dataByImportCountry.forEach(function(d, i) {
+        var pathData = line(d.values);
+        g2.append('path')
+            .attr('d', pathData)
+            .attr('class', 'line')
+            .attr('id', 'line_' + d.key)
+            .attr('stroke-width', 2)
+            .attr('stroke', function(d, j) {
+                return colorScale(i);
+            })
+            .attr("fill", "none");
+    });
+
+
+    var legendData = [{
+        "text": "Slovak Republic",
+        "color": "#96D9C6"
+    }, {
+        "text": "France",
+        "color": "#24A6A6"
+    }, {
+        "text": "Netherlands",
+        "color": "#248EA6"
+    }, {
+        "text": "Italy",
+        "color": "#1A5A73"
+    }, {
+        "text": "Germany",
+        "color": "#253B59"
+    }];
+
+    legend.selectAll("rect")
+        .data(legendData) //highest value on top
+        .enter()
+        .append("rect")
+        .attr("width", 18)
+        .attr("height", 18)
+        .attr("x", 0)
+        .attr("y", function(d, i) {
+            return i * 20;
+        })
+        .attr("class", "colorBox")
+        .attr("fill", function(d) {
+            return d.color;
+        })
+        .style("opacity", 1);
+
+    legend.selectAll("text")
+        .data(legendData) //highest value on top
+        .enter()
+        .append("text")
+        .attr("x", 24)
+        .attr("y", function(d, i) {
+            return 14 + (i * 20);
+        })
+        .attr("class", "colorText")
+        .text(function(d) {
+            return d.text;
+        })
+        .style("font-size", 14)
+        .style("opacity", 1);
+}
+
+function chart3() {
+    var topExporters = dataExitSorted.slice(-6);
+
+    var topExporters = $.grep(topExporters, function(e) {
+        return e.country != "Liquefied Natural Gas";
+    });
+
+    var topExporters2 = [];
+
+    for (var i = 0; i < topExporters.length; i++) {
+        for (var j = 0; j < 10; j++) {
+            var obj1 = {};
+            var field = 'data' + (2009 + j);
+            obj1.year = +(2009 + j);
+            obj1.export = topExporters[i][field];
+            obj1.country = topExporters[i].country;
+            topExporters2.push(obj1);
+        }
+    }
+
+    var dataByExportCountry = d3.nest()
+        .key(function(d) {
+            return d.country;
+        })
+        .entries(topExporters2);
+
+    var line = d3.line()
+        .x(function(d) {
+            return x2(d.year);
+        })
+        .y(function(d) {
+            return y2(d.export);
+        })
+        .curve(d3.curveBasis);
+
+    g3.append("g")
+        .attr("class", "axis axis--x")
+        .style("font-size", 13)
+        .attr("transform", "translate(0," + (height2) + ")")
+        .call(xAxis2);
+
+    g3.append("g")
+        .attr("class", "axis axis--y")
+        .attr("transform", "translate(0,0)")
+        .call(yAxis2)
+        .append("text")
+        .attr("class", "titles")
+        .attr("transform", "rotate(-90)")
+        .attr("x", -50)
+        .attr("y", -60)
+        .attr("dy", ".71em")
+        .attr("fill", "black")
+        .style("font-family", "PT Sans Narrow")
+        .style("font-size", 16)
+        .style("text-anchor", "middle")
+        .text("Natural Gas Exports");
+
+    var colorScale = d3.scaleOrdinal()
+        .domain([0, 1, 2, 3, 4])
+        .range(["#FFCDB2", "#FFB4A2", "#E5989B", "#B5838D", "#6D6875"]);
+
+    dataByExportCountry.forEach(function(d, i) {
+        var pathData = line(d.values);
+        g3.append('path')
+            .attr('d', pathData)
+            .attr('class', 'line')
+            .attr('id', 'line_' + d.key)
+            .attr('stroke-width', 2)
+            .attr('stroke', function(d, j) {
+                return colorScale(i);
+            })
+            .attr("fill", "none");
+    });
+
+    var legendData2 = [{
+        "text": "Slovak Republic",
+        "color": "#FFCDB2"
+    }, {
+        "text": "Russia",
+        "color": "#FFB4A2"
+    }, {
+        "text": "Ukraine",
+        "color": "#E5989B"
+    }, {
+        "text": "Germany",
+        "color": "#B5838D"
+    }, {
+        "text": "Norway",
+        "color": "#6D6875"
+    }];
+
+    legend2.selectAll("rect")
+        .data(legendData2) //highest value on top
+        .enter()
+        .append("rect")
+        .attr("width", 18)
+        .attr("height", 18)
+        .attr("x", 0)
+        .attr("y", function(d, i) {
+            return i * 20;
+        })
+        .attr("class", "colorBox")
+        .attr("fill", function(d) {
+            return d.color;
+        })
+        .style("opacity", 1);
+
+    legend2.selectAll("text")
+        .data(legendData2) //highest value on top
+        .enter()
+        .append("text")
+        .attr("x", 24)
+        .attr("y", function(d, i) {
+            return 14 + (i * 20);
+        })
+        .attr("class", "colorText")
+        .text(function(d) {
+            return d.text;
+        })
+        .style("font-size", 14)
+        .style("opacity", 1);
+
+
+}
+
 
 
 //helper functions
@@ -761,9 +1060,9 @@ function showDetail(d) {
     d3.select(this).attr('fill', texture.url());
 
 
-    var content = '<span><b>' + d.country + '</b></span><br/>' +
-        '<span><b>Exit / Enter: </b>' + d.status + '</span><br/>' +
-        '<span><b>Gas: </b>' + d[selectedData];
+    var content = '<span class="title"><b>' + d.country + '</b></span><br/>' +
+        '<span><b>Flow direction: </b>' + d.status + '</span><br/>' +
+        '<span><b>Amount: </b>' + d[selectedData] + ' (million cubic meters)';
 
     d3.selectAll('.tooltip').style('background-image', '-webkit-linear-gradient(top,' + (d.status == 'Enter' ? '#00B78C' : '#EC7E6B') + ', ' + (d.status == 'Enter' ? '#00B78C' : '#EC7E6B') + ' 40%, transparent 40%, transparent 100%)');
     d3.selectAll('.tooltip').style('background-image', 'linear-gradient(top,' + (d.status == 'Enter' ? '#00B78C' : '#EC7E6B') + ', ' + (d.status == 'Enter' ? '#00B78C' : '#EC7E6B') + ' 40%, transparent 40%, transparent 100%)');

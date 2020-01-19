@@ -68,17 +68,10 @@ margin-bottom: 6rem;
 margin-top: 90px;
 }
 .conclusion{
-margin-top: 10rem;
+margin-top: 0rem;
 margin-bottom:5rem;
 }
-#action{
-margin-top: 15rem;
-}
 
-#thankyou{
-margin-top: 10rem;
-text-align: center;
-}
 .graph-title {
 width: auto;
 font-size: 1.8rem;
@@ -95,13 +88,7 @@ paint-order: 1;
  padding-bottom: 30px;
  background-color: #f3f3f3;
  }
- #header-img, #header-img-mobile{
-   width:250px;
-   height:90px;
-   display: block;
-   margin-left: auto;
-   margin-right: auto;
- }
+
 .intro-prose{
   padding: 10px 20%;
 }
@@ -236,299 +223,126 @@ font-size: 12px;
 z-index: 10;
 }
 
-.tooltip .commonName{
+.tooltip .title{
 color:white;
-font-size:14px;
+font-size:12px;
+text-transform: uppercase;
 }
 
-.grid line {
-stroke: lightgrey;
-stroke-opacity: 0.7;
-shape-rendering: crispEdges;
-}
+
 
 .bold{
   font-weight: 700;
 }
 
-#annotate {
-  font-weight: 500;
-  font-size: 10px;
-  text-transform: uppercase;
-  -webkit-order: 5;
-  order: 5;
-  text-align: center;
-  width: 100%;
-  opacity:0;
-}
 
-.annotate-attr {
-color: #383838;
-margin-top: 15px;
-}
-
-/* #menu_wrapper{
-  height:0px;
-} */
-
-#menu{
-  background:#444;
-  height:550px;
-  margin-top:-540px;
-  color: white;
-  position:relative;
-  z-index: 100;
-}
-#menu p{
-  position: absolute;
-  color: white !important;
-  font-size: 1.3rem;
-  padding-top: 20px;
-  bottom: 20px;
-  padding-right: 20px;
-  padding-left: 20px;
-}
-#menu_btn{
-  cursor:pointer;
-  background:#444;
-  padding:5px 20px;
-  position:absolute;
-  bottom:-30px;
-  left:30px;
-  color: white;
-}
-
-#button_wrapper {
-  margin-left: auto;
-  margin-right: auto;
-  width: 400px;
-  position: relative;
-}
-#button_wrapper > button {
-  margin: 0px 8px;
-}
-#button_wrapper :first-child {
-  margin: 0 8px 0 0;
-}
-
-#button_wrapper2{
-  margin-left: auto;
-  margin-right: auto;
-  width: 400px;
-  position: relative;
-  margin-top: 10rem;
-}
-
-.button {
-  position: static;
-  cursor: pointer;
-  text-decoration: none;
-  color: #000;
-  font-size: 14px;
-  font-weight: bold;
-  padding: 0 15px;
-  line-height: 28px;
-  height: auto;
-  display: inline-block;
-  text-align: center;
-  background-color: #fff;
-  border: 1px solid #11d3bc;
-  transition: border .25s linear, color .25s linear, background-color .25s linear;
-  outline: none;
-}
-
-.button_progress {
-  background: repeating-linear-gradient(-45deg, #fff, #fff 10px, #11d3bc 10px, #11d3bc 20px);
-  color: #222831;
-  -webkit-animation: AnimationProgress 5s linear infinite;
-          animation: AnimationProgress 5s linear infinite;
-  background-size: 400% 400%;
-}
-.button:active {
-  background-color: #11d3bc;
-  color: #fff;
-  opacity: .3;
-}
-.button_disabled {
-  color: gray;
-  cursor: default;
-  background-color: #eeeeee;
-}
-.button_disabled:active {
-  opacity: 1;
-  color: gray;
-  background-color: #eeeeee;
-}
-
-.btn {
-  border: none;
-  display: block;
-  text-align: center;
-  cursor: pointer;
-  text-transform: uppercase;
-  outline: none;
-  overflow: hidden;
-  position: relative;
-  color: white;
-  font-weight: 700;
-  font-size: 1.5rem;
-  background-color: #222;
-  padding: 10px 15px;
-  margin: 0 auto;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.20);
-  transition: all 1s ease;
-}
-
-.btn a {
-  position: relative;
-  z-index: 1;
-  color: white;
-}
-
-.btn:hover, .btn a:hover{
-  color:black !important;
-  text-decoration: none !important;
-  cursor: pointer !important;
-}
-
-.btn:focus, a:focus {
-  outline: none !important;
-  text-decoration: none !important;
-}
-
-
-#headline-mobile{
-  position: absolute;
-  top:0px;
-}
-
-#mobile-content{
-  padding-top: 20px;
-  padding-left:20px;
-}
-
-#intro-mobile{
-  font-size: 1.3rem;
-  padding-top: 20px;
-  bottom: 20px;
-  padding-right: 20px;
-  padding-left: 20px;
-}
-
-#title-mobile{
-  text-align: center;
-  font-family: 'Frank Ruhl Libre', serif;
-  margin: 0px;
-  font-size: 3rem;
-  font-weight: 700;
-  margin-top: 0px;
-  color: #2a2a2a;
-  padding-top: 2rem;
-}
-
-/* Tooltip text */
-.reference .text {
-	visibility: hidden;
-	max-width: 200px;
-	background-color: black;
-	color: #fff;
-	text-align: center;
-	padding: 5px 10px;
-	border-radius: 6px;
-	font-size:14px;
-	/* Position the tooltip text - see examples below! */
-	position: absolute;
-  margin-top: 30px;
-	z-index: 1;
-}
-/* Show the tooltip text when you mouse over the tooltip container */
-.reference:hover .text {
-	visibility: visible;
-}
-
-.reference-color{
-  background-color:#ccece6;
+.colorEnter{
+  background-color:#00B78C;
 	font-weight:600;
 	border-radius:5px;
 	padding-left:3px;
 	padding-right:3px;
 }
 
+.colorExit{
+  background-color: #EC7E6B;
+  font-weight:600;
+  border-radius:5px;
+  padding-left:3px;
+  padding-right:3px;
+}
+
 .box{
   position:relative;
 }
 
-.img-title{
-  position: absolute;
-  color: #fff;
-  text-align: center;
-  left: 0;
-  right: 0;
-  bottom: -50px;
-  font-size:1.6rem;
+.container1 {
+  width: 500px;
+  margin: 50px auto 0;
+  text-align: center
 }
 
-.portfolio-modal .modal-content {
-		border-radius: 0;
-		background-clip: border-box;
-		-webkit-box-shadow: none;
-		box-shadow: none;
-		border: 0;
-		min-height: 100%;
-		padding: 100px 0;
-		text-align: center
-	}
-	.portfolio-modal .modal-content h2 {
-		margin-bottom: 15px;
-		font-size: 3em
-	}
-	.portfolio-modal .modal-content p {
-		margin-bottom: 30px
-	}
-	.portfolio-modal .modal-content p.item-intro {
-		margin: 20px 0 30px;
-		font-style: italic;
-		font-size: 16px
-	}
-	.portfolio-modal .modal-content ul.list-inline {
-		margin-bottom: 30px;
-		margin-top: 0
-	}
-	.portfolio-modal .modal-content img {
-		margin-bottom: 30px
-	}
-	.portfolio-modal .close-modal {
-		position: absolute;
-		width: 75px;
-		height: 75px;
-		background-color: transparent;
-		top: 25px;
-		right: 25px;
-		cursor: pointer
-	}
-	.portfolio-modal .close-modal:hover {
-		opacity: .3
-	}
-	.portfolio-modal .close-modal .lr {
-		height: 75px;
-		width: 1px;
-		margin-left: 35px;
-		background-color: #222;
-		transform: rotate(45deg);
-		-ms-transform: rotate(45deg);
-		-webkit-transform: rotate(45deg);
-		z-index: 1051
-	}
-	.portfolio-modal .close-modal .lr .rl {
-		height: 75px;
-		width: 1px;
-		background-color: #222;
-		transform: rotate(90deg);
-		-ms-transform: rotate(90deg);
-		-webkit-transform: rotate(90deg);
-		z-index: 1052
-	}
-	.portfolio-modal .modal-backdrop {
-		opacity: 0;
-		display: none
-	}
+.container{
+  margin-bottom: 100px;
+}
+
+/*Styling Selectbox*/
+.dropdown {
+  width: 300px;
+  display: inline-block;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 2px rgb(204, 204, 204);
+  transition: all .5s ease;
+  position: relative;
+  font-size: 14px;
+  color: #474747;
+  height: 100%;
+  text-align: left
+}
+.dropdown .select {
+    cursor: pointer;
+    display: block;
+    padding: 10px
+}
+.dropdown .select > i {
+    font-size: 13px;
+    color: #888;
+    cursor: pointer;
+    transition: all .3s ease-in-out;
+    float: right;
+    line-height: 20px
+}
+.dropdown:hover {
+    box-shadow: 0 0 4px rgb(204, 204, 204)
+}
+.dropdown:active {
+    background-color: #f8f8f8
+}
+.dropdown.active:hover,
+.dropdown.active {
+    box-shadow: 0 0 4px rgb(204, 204, 204);
+    border-radius: 5px 5px 0 0;
+    background-color: #f8f8f8
+}
+.dropdown.active .select > i {
+    transform: rotate(-90deg)
+}
+.dropdown .dropdown-menu {
+    position: absolute;
+    background-color: #fff;
+    width: 100%;
+    left: 0;
+    margin-top: 1px;
+    box-shadow: 0 1px 2px rgb(204, 204, 204);
+    border-radius: 0 1px 5px 5px;
+    overflow: hidden;
+    display: none;
+    max-height: 144px;
+    overflow-y: auto;
+    z-index: 9
+}
+.dropdown .dropdown-menu li {
+    padding: 10px;
+    transition: all .2s ease-in-out;
+    cursor: pointer
+}
+.dropdown .dropdown-menu {
+    padding: 0;
+    list-style: none
+}
+.dropdown .dropdown-menu li:hover {
+    background-color: #f2f2f2
+}
+.dropdown .dropdown-menu li:active {
+    background-color: #e2e2e2
+}
+
+#introdummy{
+  margin-top: 50px;
+  margin-bottom:50px;
+}
+
+.wrap{
+  padding: 30px;
+}
