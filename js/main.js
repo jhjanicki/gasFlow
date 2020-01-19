@@ -815,14 +815,14 @@ function chart2() {
         .append("text")
         .attr("class", "titles")
         .attr("transform", "rotate(-90)")
-        .attr("x", -50)
+        .attr("x", -115)
         .attr("y", -60)
         .attr("dy", ".71em")
         .attr("fill", "black")
         .style("font-family", "PT Sans Narrow")
         .style("font-size", 16)
         .style("text-anchor", "middle")
-        .text("Natural Gas Imports");
+        .text("Natural Gas Imports (Million cubic meters)");
 
     var colorScale = d3.scaleOrdinal()
         .domain([0, 1, 2, 3, 4])
@@ -939,14 +939,14 @@ function chart3() {
         .append("text")
         .attr("class", "titles")
         .attr("transform", "rotate(-90)")
-        .attr("x", -50)
+        .attr("x", -115)
         .attr("y", -60)
         .attr("dy", ".71em")
         .attr("fill", "black")
         .style("font-family", "PT Sans Narrow")
         .style("font-size", 16)
         .style("text-anchor", "middle")
-        .text("Natural Gas Exports");
+        .text("Natural Gas Exports (Million cubic meters)");
 
     var colorScale = d3.scaleOrdinal()
         .domain([0, 1, 2, 3, 4])
